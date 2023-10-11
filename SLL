@@ -1,0 +1,119 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+	int value;
+	Node* next;
+
+	Node(int value) {
+		this->value = value;
+		this->next = nullptr;
+	}
+
+	~Node() {
+		int data = this->value;
+		cout << "Memory free: " << data << "\n";
+	}
+};
+
+void insertAtHead(Node* &head, int value) {
+	Node* temp = new Node(value);
+	temp->next = head;
+	head = temp;
+}
+
+void insertAtTail(Node* &tail, int value) {
+	Node* temp = new Node(value);
+	tail->next = temp;
+	tail = tail->next;
+}
+
+void insertAtPosition(int position, int value, Node* &head, Node* &tail) {
+	if (position == 1){
+		insertAtHead(head, value);
+		return;
+	}
+	Node* temp = new Node(value);
+	Node* tempHead = head;
+
+	int start = 1;
+	while (start < (position - 1)) {
+		tempHead = tempHead->next;
+		start++;
+	}
+	temp->next = tempHead->next;
+	tempHead->next = temp;
+	if (temp->next == nullptr) {
+		tail = temp;
+	}
+}
+
+void deleteNodePosition(int position, Node* &head, Node* &tail) {
+	if (position == 1) {
+		Node* temp = head;
+		head = head->next;
+		temp->next = nullptr;
+		delete temp; //deallocate the memory it was pointing to, so thats why we should manually point next to nullptr
+		return;
+	}
+	Node* current = head;
+	Node* prev = head;
+	int start = 1;
+	while (start < position) {
+		prev = current;
+		current = current->next;
+		start++;
+	}
+	prev->next = current->next;
+	if (current->next == nullptr) {
+		tail = prev;
+		delete current;
+		return;
+	}
+	current->next = nullptr;
+	delete current;
+}
+
+void deleteNodeValue() {
+
+} //to do
+
+void merge() {
+
+} // to do
+
+void sort() {
+
+} //to do
+
+void reverse() {
+
+} //to do
+
+void print(Node*& head) {
+	Node* temp = head;
+	while (temp != nullptr) {
+		cout << temp->value<<" ";
+		temp = temp->next;
+	}
+	cout << "\n";
+}
+
+int main() {
+	Node* head = new Node(30);
+	Node* tail = head;
+	insertAtHead(head, 7);
+	insertAtTail(tail, 68);
+	insertAtTail(tail, 69);
+	insertAtPosition(3, 56, head, tail);
+	insertAtPosition(2, 1, head, tail);
+	insertAtPosition(7, 1, head, tail);
+	deleteNodePosition(1, head, tail);
+	deleteNodePosition(3, head, tail);
+	deleteNodePosition(5, head, tail);
+	print(head);
+	cout << "head:" << head->value << " " << head->next << "\n";
+	cout << "tail:" << tail->value << " " << tail->next << "\n";
+	return 0;
+}
