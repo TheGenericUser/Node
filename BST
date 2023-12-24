@@ -1,0 +1,239 @@
+class Node {
+    public:
+        int value;
+        Node* left; 
+        Node* right;
+
+        Node() {
+            this->value = 0;
+            this->left = nullptr;
+            this->right = nullptr;
+        }
+
+        Node(int value) {
+            this->value = value;
+            this->left = nullptr;
+            this->right = nullptr;
+        }
+};
+
+class BST{
+    public:
+        Node* root;
+        
+        BST(){
+            this->root = nullptr;
+        }
+
+        bool isTreeEmpty() {
+            return root == nullptr;
+        }
+
+        void insertNode(Node* node) {
+            if (root == nullptr) {
+                root = node;
+                cout << "Inserted at root.\n";
+            }
+            else{
+                Node* temp = root;
+                while(temp != nullptr){
+                    if (node->value == temp->value) {
+                        cout << "No duplicates allowed.\n";
+                    }
+                    else if ((node->value < temp->value) && (temp->left == nullptr)) {
+                        temp->left = node;
+                        cout << "Inserted at left node of "<<temp->value<<"\n";
+                        return;
+                    }
+                    else if (node->value < temp->value) {
+                        temp = temp->left;
+                    }
+                    else if ((node->value > temp->value) && (temp->right == nullptr)) {
+                        temp->right = node;
+                        cout << "Inserted at right node of " << temp->value << "\n";
+                        return;
+                    }
+                    else {
+                        temp = temp->right;
+                    }
+                }
+            }
+
+        }
+
+        void preorderTraversal(Node* start) {
+            if (start == nullptr) {
+                return;
+            }
+            cout << start->value << " ";
+            preorderTraversal(start->left);
+            preorderTraversal(start->right);
+        }
+
+        void inorderTraversal(Node* start) {
+            if (start == nullptr) {
+                return;
+            }
+            inorderTraversal(start->left);
+            cout << start->value << " ";
+            inorderTraversal(start->right);
+        }
+
+        void postorderTraversal(Node* start) {
+            if (start == nullptr) {
+                return;
+            }
+            postorderTraversal(start->left);
+            postorderTraversal(start->right);
+            cout << start->value << " ";
+        }
+
+        void print2D(Node* start, int space) {
+            if (start == NULL){
+                return; 
+            }
+            space += SPACE;
+            print2D(start->right, space);
+            cout <<"\n";
+            for (int i = SPACE; i < space; i++){
+                cout << " ";
+            }
+            cout << start->value << "\n";
+            print2D(start->left, space);
+        }
+
+        Node* searchTree(int value) {
+            if (root == nullptr) {
+                return nullptr;
+            }
+            Node* temp = root;
+            while (temp != nullptr) {
+                if (value == temp->value) {
+                    return temp;
+                }
+                else if(value < temp->value){
+                    temp = temp->left;
+                }
+                else {
+                    temp = temp->right;
+                }
+            }
+        }
+
+        Node* searchTreeRecursive(Node* r, int value) {
+            if (r == nullptr || value == r->value) {
+                return r;
+            }
+            else if (value < r->value) {
+                searchTreeRecursive(r->left, value);
+            }
+            else{
+                searchTreeRecursive(r->right, value);
+            }
+        }
+
+        Node* minValue(Node* node) {
+            while (node->left != nullptr) {
+                node = node->left;
+            }
+            return node;
+        }
+
+        Node* deleteBST(Node* start, int value) {
+            if (start == nullptr) {
+                return start;
+            }
+            else if (value < start->value) {
+                start->left = deleteBST(start->left, value);
+            }
+            else if (value > start->value) {
+                start->right = deleteBST(start->right, value);
+            }
+            else {
+                Node* temp;
+                if (start->left == nullptr) {
+                    temp = start->right;
+                    delete start;
+                    return temp;
+                }
+                else if (start->right = nullptr) {
+                    temp = start->left;
+                    delete start;
+                    return temp;
+                }
+                else {
+                    temp = minValue(start->right);
+                    start->value = temp->value;
+                    start->right = deleteBST(start->right, temp->value);
+                }
+            }
+            return start;
+        }
+};
+
+int main(){
+    BST bst;
+    int option, value;
+    do {
+        cout << "What operation do you want to perform? " <<
+            " Select Option number. Enter 0 to exit." << endl;
+        cout << "1. Insert Node" << endl;
+        cout << "2. Search Node" << endl;
+        cout << "3. Delete Node" << endl;
+        cout << "4. Print/Traversal BST values" << endl;
+        cout << "5. Clear Screen" << endl;
+        cout << "0. Exit Program" << endl;
+
+        cin >> option;
+        Node* node = new Node();
+
+        switch (option) {
+        case 0:
+            break;
+        case 1:
+            cout << "INSERT" << endl;
+            cout << "Enter VALUE of TREE NODE to INSERT in BST: ";
+            cin >> value;
+            node->value = value;
+            bst.insertNode(node);
+            break;
+        case 2:
+            cout << "SEARCH" << endl;
+            cout << "Enter VALUE of TREE NODE to SEARCH in BST: ";
+            cin >> value;
+            node = bst.searchTree(value);
+            if (node != nullptr) {
+                cout << "Value found" << endl;
+            }
+            else {
+                cout << "Value NOT found" << endl;
+            }
+            break;
+        case 3:
+            cout << "DELETE" << endl;
+            cout << "Enter VALUE of TREE NODE to DELETE in BST: ";
+            cin >> value;
+            break;
+        case 4:
+            cout << "Preorder:\n";
+            bst.preorderTraversal(bst.root);
+            cout << "\n";
+            cout << "Inorder:\n";
+            bst.inorderTraversal(bst.root);
+            cout << "\n";
+            cout << "Postorder:\n";
+            bst.postorderTraversal(bst.root);
+            cout << "\n";
+            cout << "PRINT 2D:\n";
+            bst.print2D(bst.root, 5);
+            cout << "\n";
+            break;
+        case 5:
+            system("cls");
+            break;
+        default:
+            cout << "Enter Proper Option number " << endl;
+        }
+
+    } while (option != 0);
+}
