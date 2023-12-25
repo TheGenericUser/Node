@@ -1,0 +1,203 @@
+#include <iostream>
+using namespace std;
+
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int data) {
+        this->data = data;
+        this->next = nullptr;
+    }
+    Node() {
+        this->data = 0;
+        this->next = nullptr;
+    }
+
+    ~Node() {
+        cout << "Node deleted.\n";
+    }
+};
+
+void insertAtHead(Node*& head, Node*& tail, int data) {
+    Node* temp = new Node(data);
+    if (head == nullptr) {
+        head = temp;
+        tail = head;
+    }
+    else {
+        temp->next = head;
+        head = temp;
+    }
+    cout << "Node added.\n";
+}
+
+void insertAtTail(Node*& head, Node*& tail, int data) {
+    Node* temp = new Node(data);
+    if (head == nullptr) {
+        head = temp;
+        tail = head;
+    }
+    else {
+        tail->next = temp;
+        tail = temp;
+    }
+    cout << "Node added.\n";
+}
+
+void insertAtPosition(Node*&head, Node*&tail, int data, int position) {
+    if (position == 1) {
+        insertAtHead(head, tail, data);
+    }
+    else{
+        Node* temp = new Node(data);
+        Node* current = head;
+        for (int i = 1; i < (position - 1); i++) {
+            current = current->next;
+        }
+        if (current->next == nullptr) {
+            insertAtTail(head, tail, data);
+        }
+        else {
+            temp->next = current->next;
+            current->next = temp;
+        }
+    }
+    cout << "Node added.\n";
+}
+
+void deleteNodePosition(Node*& head, Node*& tail, int position) {
+    Node* current = head;
+    if (position == 1) {
+        head = head->next;
+        current->next = nullptr;
+        delete current;
+    }
+    else {
+        Node* beforeCurrent = nullptr;
+        for (int i = 1; i <  position; i++){
+            beforeCurrent = current;
+            current = current->next;
+        }
+        if (current->next == nullptr) {
+            tail = beforeCurrent;
+            delete current;
+        }
+
+        else {
+            beforeCurrent->next = current->next;
+            current->next = nullptr;
+            delete current;
+        }
+    }
+    cout << "Node deleted\n";
+}
+
+void reverse(Node*&head, Node*&tail) {
+    Node* temp = nullptr;
+    Node* prev = nullptr;
+    Node* current = head;
+    while (current != nullptr) {
+        temp = current->next;
+        current->next = prev;
+        prev = current;
+        current = temp;
+    }
+    head = prev;
+}
+
+void print(Node*& head) {
+    if (head == nullptr) {
+        return;
+    }
+    Node* temp = head;
+    while (temp != nullptr) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+}
+
+void whatIsHead(Node* head) {
+    cout << head->next <<"\n";
+    cout << head->data << "\n";
+}
+
+void whatIsTail(Node* tail) {
+    cout << tail->next << "\n";
+    cout << tail->data << "\n";
+}
+
+int main() {
+    Node* head = nullptr;
+    Node* tail = head;
+    int option, value, position;
+    do {
+        cout << "What operation do you want to perform? " <<
+            " Select Option number. Enter 0 to exit\n";
+            cout << "1. Insert Node at head\n";
+            cout << "2. Insert Node at tail\n";
+            cout << "3. Insert Node at position\n";
+            cout << "4. Delete Node\n";
+            cout << "5. Reverse Node\n";
+            cout << "6. Print/Traversal\n";
+            cout << "7. Clear Screen\n";
+            cout << "8. Head\n";
+            cout << "9. Tail\n";
+            cout << "0. Exit Program\n";
+
+            cin >> option;
+
+        switch (option) {
+        case 0:
+            break;
+        case 1:
+            cout << "INSERT AT HEAD\n";
+            cout << "Enter VALUE of NODE to INSERT at HEAD: ";
+            cin >> value;
+            insertAtHead(head, tail, value);
+            break;
+        case 2:
+            cout << "INSERT AT TAIL\n";
+            cout << "Enter VALUE of NODE to INSERT at TAIL: ";
+            cin >> value;
+            insertAtTail(head, tail, value);
+            break;
+        case 3:
+            cout << "INSERT AT POSITION\n";
+            cout << "Enter POSITION of NODE to INSERT at: ";
+            cin >> position;
+            cout << "Enter VALUE of NODE to INSERT at POSITION (" << position << "): ";
+            cin >> value;
+            insertAtPosition(head, tail, value, position);
+            break;
+        case 4:
+            cout << "DELETE\n";
+            cout << "Enter POSITION of NODE to DELETE: ";
+            cin >> position;
+            deleteNodePosition(head, tail, position);
+            break;
+        case 5:
+            cout << "REVERSE:\n";
+            reverse(head, tail);
+            break;
+        case 6:
+            cout << "PRINT\n";
+            print(head);
+            break;
+        case 7:
+            system("cls");
+            break;
+        case 8:
+            whatIsHead(head);
+            break;
+        case 9:
+            whatIsTail(tail);
+            break;
+        default:
+            cout << "Enter Proper Option number \n";
+        }
+    } while (option != 0);
+	return 0;
+}
