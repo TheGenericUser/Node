@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+	Node* next;
+	int value;
+
+	Node() {
+		this->value = 0;
+		this->next = nullptr;
+	}
+	Node(int value) {
+		this->value = value;
+		this->next = nullptr;
+	}
+
+	bool isEmpty() {
+		return next == nullptr;
+	}
+
+	int front(Node*& cursor) {
+		if (cursor == nullptr) {
+			cout << "List empty\n";
+			return -1;
+		}
+		return cursor->value;
+	}
+
+	int back(Node*& cursor) {
+		if (cursor == nullptr) {
+			cout << "List empty\n";
+			return -1;
+		}
+		return cursor->next->value;
+	}
+
+	void advance(Node*& cursor) {
+		if (cursor != nullptr) {
+			cursor = cursor->next;
+		}
+		else {
+			cout << "List empty.\n";
+		}
+	}
+
+	void insert(Node*& cursor, int data) {
+		Node* newNode = new Node(data);
+		if (cursor == nullptr) {
+			cursor = newNode;
+			cursor->next = cursor;
+		}
+		else {
+			newNode->next = cursor->next;
+			cursor->next = newNode;
+		}
+	}
+
+	void deleteNode(Node*& cursor) {
+		if (cursor == nullptr) {
+			cout << "List empty\n";
+		}
+		if (cursor->next = cursor) {
+			cursor->next = nullptr;
+			delete cursor;
+		}
+		else {
+			Node* temp = cursor->next;
+			cursor->next = temp->next;
+			temp->next = nullptr;
+			delete temp;
+		}
+	}
+};
+
+int main() {
+	Node* cursor = nullptr;
+}
